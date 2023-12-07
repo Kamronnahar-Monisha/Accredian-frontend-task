@@ -8,9 +8,9 @@ const Login = () => {
     return (
         <div className='login'>
             <Container sx={{ py: 6 }}>
-                <Grid container spacing={3} justifyContent="space-around" alignItems="center">
+                <Grid container spacing={3} justifyContent="center" alignItems="center">
                     <Grid item xs={12} md={6}>
-                        <img src={LoginImg} alt="A girl is signing in a website" />
+                        <img src={LoginImg} alt="A girl is logging in a website" />
                     </Grid>
                     <Grid item xs={11} md={5}>
                         <Paper sx={{ px: 3, py: 4 }} elevation="3">
@@ -27,12 +27,12 @@ const Login = () => {
                                 </div>
                                 <br />
                                 <div>
-                                    <Button type="submit" variant="contained" color='primary' fullWidth>Sign Up</Button>
+                                    <Button type="submit" variant="contained" color='primary' fullWidth>Log IN</Button>
                                 </div>
                             </form>
                             <br />
                             <Typography variant="body2" align="center" color="secondary">
-                                Already have an account? Please <Link to='/login' className='link-style-none'><Typography component="body2" color="primary" >Login</Typography></Link>
+                                Don't have a account ? Please <Link to='/sign-up' className='link-style-none'><Typography component="body2" color="primary" >Sign Up</Typography></Link>
                             </Typography>
                         </Paper>
                     </Grid>
