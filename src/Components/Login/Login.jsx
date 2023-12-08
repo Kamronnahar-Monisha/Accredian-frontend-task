@@ -1,10 +1,53 @@
 import { Button, Container, Grid, Paper, TextField, Typography } from '@mui/material';
 import './Login.css';
 import LoginImg from '../../images/Login.gif';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 
 const Login = () => {
+
+    const navigate = useNavigate();
+
+    const handleLogin = (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const email = form.email.value;
+        const password = form.password.value;
+
+        const user = {
+            email,
+            password
+        };
+
+        fetch('http://localhost:5000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                form.reset();
+                if (data.acknowledge) {
+                    toast.success('Log in process completed successfully');
+                    navigate('/home');
+                }
+                else {
+                    if(data.message === 'Wrong Password'){
+                        toast.error('Password was incorrect');
+                    }
+                    else if(data.message === 'Account does not exist'){
+                        toast.error('There is no account with this email');
+                    }
+                    return;
+                }
+            });
+    }
+
+
     return (
         <div className='login'>
             <Container sx={{ py: 6 }}>
@@ -17,9 +60,9 @@ const Login = () => {
                             <Typography variant='h6' component='h1' sx={{ color: "#527853", mb: 3 }}>
                                 Please Log In !!
                             </Typography>
-                            <form autoComplete="off" width="100%">
+                            <form autoComplete="off" width="100%" onSubmit={handleLogin}>
                                 <div>
-                                    <TextField required id="user-name-or-email" label="User Name or Email" InputLabelProps={{ shrink: true }} fullWidth size="small" color="primary" />
+                                    <TextField required id="email" label="Email" InputLabelProps={{ shrink: true }} fullWidth size="small" color="primary" />
                                 </div>
                                 <br />
                                 <div>

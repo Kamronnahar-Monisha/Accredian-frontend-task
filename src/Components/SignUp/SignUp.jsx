@@ -1,9 +1,55 @@
-import { Button, Container, Grid, Paper, TextField, Typography } from '@mui/material';
+import {Button, Container, Grid, Paper, TextField, Typography } from '@mui/material';
 import './SignUp.css';
 import signUpImg from '../../images/Sign up.gif';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const SignUp = () => {
+
+    const navigate = useNavigate();
+
+
+    const handleSignUp = (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const userName = form.userName.value;
+        const email = form.email.value;
+        const password = form.password.value;
+        const confirmPassword = form.confirmPassword.value;
+
+        // checking for equality of password and confirmPassword
+        if (password !== confirmPassword) {
+            toast.error('Password and Confirm Password should be same !');
+            return;
+        }
+
+        const user = {
+            userName,
+            email,
+            password
+        };
+
+        fetch('http://localhost:5000/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if (data.acknowledge) {
+                    form.reset();
+                    toast.success('Sign up completed Successfully. Please login');
+                    navigate('/login');
+                }
+                else{
+                    toast.error('There is already exist an account with this email');
+                    return;
+                }
+            });
+    }
 
     return (
         <div className='sign-up'>
@@ -17,30 +63,30 @@ const SignUp = () => {
                             <Typography variant='h6' component='h1' sx={{ color: "#527853", mb: 3 }}>
                                 Please Sign Up !!
                             </Typography>
-                            <form  autoComplete="off" width="100%">
+                            <form autoComplete="off" width="100%" onSubmit={handleSignUp} >
                                 <div>
-                                    <TextField required id="user-name" label="User Name" InputLabelProps={{ shrink: true }} fullWidth size="small" color="primary" />
+                                    <TextField required id="user-name" name="userName" label="User Name" InputLabelProps={{ shrink: true }} fullWidth size="small" color="primary" />
                                 </div>
                                 <br />
                                 <div>
-                                    <TextField required id="email" label="Email" InputLabelProps={{ shrink: true }} fullWidth size="small" color="primary" type='email' />
+                                    <TextField required id="email" name="email" label="Email" InputLabelProps={{ shrink: true }} fullWidth size="small" color="primary" type='email' />
                                 </div>
                                 <br />
                                 <div>
-                                    <TextField required id="password" label="Password" InputLabelProps={{ shrink: true }} fullWidth size="small" color="primary" type='password' />
+                                    <TextField required id="password" name="password" label="Password" InputLabelProps={{ shrink: true }} fullWidth size="small" color="primary" type='password' />
                                 </div>
                                 <br />
                                 <div>
-                                    <TextField required id="confirm-password" label="Confirm Password" InputLabelProps={{ shrink: true }} fullWidth size="small" color="primary" type='password' />
+                                    <TextField required id="confirm-password" name="confirmPassword" label="Confirm Password" InputLabelProps={{ shrink: true }} fullWidth size="small" color="primary" type='password' />
                                 </div>
-                                <br/>
+                                <br />
                                 <div>
                                     <Button type="submit" variant="contained" color='primary' fullWidth>Sign Up</Button>
                                 </div>
                             </form>
-                            <br/>
+                            <br />
                             <Typography variant="body2" align="center" color="secondary">
-                            Already have an account? Please <Link to='/login'className='link-style-none'><Typography component="body2" color="primary" >Login</Typography></Link>
+                                Already have an account? Please <Link to='/login' className='link-style-none'><Typography component="body2" color="primary" >Login</Typography></Link>
                             </Typography>
                         </Paper>
                     </Grid>

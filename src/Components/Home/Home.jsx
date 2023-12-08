@@ -1,8 +1,16 @@
 import './Home.css';
 import successImg from '../../images/Achievement.gif';
 import { Button, Container, Grid, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+
+    const navigate = useNavigate();
+
+    const handleLogout = ()=>{
+        navigate('/login');
+    }
+
     return (
         <div>
             <Container sx={{ py: 6 }}>
@@ -17,7 +25,7 @@ const Home = () => {
                     Log in process completed successfully
                 </Typography>
                 <Typography align='center' sx={{mt:2}}>
-                    <Button type="button" variant="contained" color='primary'>Log Out</Button>
+                    <Button type="button" variant="contained" color='primary' onClick={handleLogout}>Log Out</Button>
                 </Typography>
             </Container>
         </div>
